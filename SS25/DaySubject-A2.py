@@ -81,7 +81,7 @@ sched['CampusPrediction'] = sched['CampusPrediction'].fillna('')
 
 
 # Title of the app
-st.title('Schedule Viewer by Day - Subject - Campus')
+st.title('Ann Arbor Schedule Viewer by Day - Subject - Campus')
 
 # Create a dropdown for days of the week
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']

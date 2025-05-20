@@ -60,13 +60,17 @@ day_filtered_df = sched[sched[selDay].isin(['M', 'T', 'W', 'R', 'F'])]
 # Create a dropdown for subjects
 subject_counts = day_filtered_df['Subject'].value_counts().to_dict()
 subject_options = [f"{subject} ({count})" for subject, count in subject_counts.items()]
+subject_options.insert(0, f"All ({len(day_filtered_df)})")
 selected_subject_option = st.selectbox('Select a subject:', subject_options)
 
 # Extract the subject name from the selected option
 selected_subject = selected_subject_option.split(' (')[0]
 
-# Filter the DataFrame based on the selected subject
-subject_filtered_df = day_filtered_df[day_filtered_df['Subject'] == selected_subject]
+# Apply subject filter if NOT "All"
+if selected_subject != 'All':
+    subject_filtered_df = day_filtered_df[day_filtered_df['Subject'] == selected_subject]
+else:
+    subject_filtered_df = day_filtered_df
 
 final_df = subject_filtered_df
 
@@ -94,8 +98,8 @@ st.write(f"Showing schedule for {selected_subject} for {selected_day}:")
 st.dataframe(final_df)
 '''
 # Add a dropdown for instruction mode
-instruction_modes = sorted(final_df['Instructional Mode'].unique().tolist())
-selected_mode = st.selectbox('Filter by Instruction Mode:', ['All'] + instruction_modes)
+instruction_modes = sorted(final_df['Instructional Mode'].dropna().unique())
+selected_mode = st.selectbox('Filter by Instruction Mode:', options=['All'] + list(instruction_modes))
 
 # Filter by selected instruction mode
 if selected_mode != 'All':
@@ -109,3 +113,4 @@ if selected_mode != 'All':
 mode_text = f" ({selected_mode} mode)" if selected_mode != 'All' else " (all modes)"
 st.write(f"Showing schedule for {selected_subject} for {selected_day}{mode_text}:")
 st.dataframe(final_df)
+
