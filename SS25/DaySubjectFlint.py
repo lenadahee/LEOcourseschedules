@@ -10,14 +10,14 @@ new_Bldgs = json.loads(response.text)
 
 
 
-DATA = 'https://github.com/umsi-amadaman/LEOcourseschedules/raw/main/W25/Flint_S25.csv'
+DATA = 'https://github.com/umsi-amadaman/LEOcourseschedules/raw/main/SS25/Flint_S25.csv'
 #https://github.com/umsi-amadaman/LEOcourseschedules/blob/main/W25/A2SchedW25.csv
 
 sched = pd.read_csv(DATA)
 
 #Breakout Room and Building
 sched['Room'] = sched['Facility ID'].str.rsplit(' ', n=1).str[0]
-sched['Bldg'] = sched['Facility Descr'].str.rsplit(' ', n=1).str[-1]
+sched['Bldg'] = sched['Facility Desccr'].str.rsplit(' ', n=1).str[-1]
 
 monthlydata = 'https://github.com/umsi-amadaman/LEOcourseschedules/raw/main/W25/LEOmonthly_Jan25.csv'
 
@@ -94,9 +94,9 @@ final_df = final_df.drop(columns=['Class Nbr'])
 #st.write("Available columns in final_df:", list(final_df.columns))
 
 final_df = final_df[['Meeting Time Start', 'Meeting Time End','Room', 'Bldg', 'Class Instr Name', 'Crse Descr', 'Subject',
-       'Catalog Nbr', 
-       'Class Mtg Nbr',
-       'Meeting Start Dt', 'Meeting End Dt',
+       'Catalog Nbr',
+       #'Class Nbr',
+       'Meeting Start Dt', 'Meeting EndDt',
        'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun']]
 
 ### we're not looking up lecs like we do for A2... so you gotta get their appt info yourself
@@ -105,8 +105,8 @@ IGNORE2 = '''
 final_df = final_df[['Meeting Time Start', 'Meeting Time End','Room', 'Bldg', 'Crse Descr', 'Subject',
        'Catalog Nbr', 'Class Section', 'Class Instr Name', 'UM ID', 'Job Title', 
        'Appointment Start Date', 'FTE', 'Department Name', 'Deduction' ,
-       'Class Mtg Nbr',
-       'Instruction Mode Descrshort', 'Meeting Start Dt', 'Meeting End Dt',
+       'Class Nbr',
+       'Instruction Mode Descrshort', 'Meeting Start Dt', 'Meeting EndDt',
        'Mon', 'Tues', 'Wed', 'Thurs', 'Fri', 'Sat', 'Sun']]
 '''
 final_df['Meeting Time Start'] = pd.to_datetime(final_df['Meeting Time Start'], errors='coerce').dt.strftime('%H:%M')
