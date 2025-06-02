@@ -82,7 +82,7 @@ def show_ann_arbor():
 
     # Filter by Day and Subject
     days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-    sel_day = st.selectbox("Select Day", days)
+    sel_day = st.selectbox("Select Day", days, key="aa_day_select")
     day_map = {
         "Monday": "Mon",
         "Tuesday": "Tues",
@@ -93,83 +93,7 @@ def show_ann_arbor():
     day_df = merged_df[merged_df[day_map[sel_day]] == "Y"]
 
     subject_opts = sorted(day_df["Subject"].dropna().unique().tolist())
-    sel_subj = st.selectbox("Select Subject", ["All"] + subject_opts)
-
-    if sel_subj != "All":
-        day_df = day_df[day_df["Subject"] == sel_subj]
-
-    st.dataframe(day_df)
-    st.write(f"Total classes: {len(day_df)}")
-
-    # Merge
-    df["Class Instr ID"] = pd.to_numeric(df["Class Instr ID"], errors="coerce")
-    monthly["UM ID"] = pd.to_numeric(monthly["UM ID"], errors="coerce")
-    df = df.dropna(subset=["Class Instr ID"])
-    monthly = monthly.dropna(subset=["UM ID"])
-    df["Class Instr ID"] = df["Class Instr ID"].astype(float)
-    merged_df = df.merge(
-        monthly, left_on="Class Instr ID", right_on="UM ID", how="left"
-    )
-    # Drop unnecessary columns
-    drop_cols = [
-        "Class Instr ID",
-        "Facility ID",
-        "Facility Descr",
-        "Employee Last Name",
-        "Employee First Name",
-        "UM ID",
-        "Rec #",
-        "Class Indc",
-        "Job Code",
-        "Hire Begin Date",
-        "Appointment Start Date",
-        "Appointment End Date",
-        "Comp Frequency",
-        "Appointment Period",
-        "Appointment Period Descr",
-        "Comp Rate",
-        "Deduction",
-        "Home Address 1",
-        "Home Address 2",
-        "Home Address 3",
-        "Home City",
-        "Home State",
-        "Home Postal",
-        "Home County",
-        "Home Country",
-        "Home Phone",
-        "UM Address 1",
-        "UM Address 2",
-        "UM Address 3",
-        "UM City",
-        "UM State",
-        "UM Postal",
-        "UM County",
-        "UM Country",
-        "UM Phone",
-        "Employee Status",
-        "Employee Status Descr",
-        "Uniqname",
-    ]
-
-    merged_df = merged_df.drop(
-        columns=[col for col in drop_cols if col in merged_df.columns]
-    )
-
-    # Filter by Day and Subject
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-    sel_day = st.selectbox("Select Day", days)
-    day_map = {
-        "Monday": "Mon",
-        "Tuesday": "Tues",
-        "Wednesday": "Wed",
-        "Thursday": "Thurs",
-        "Friday": "Fri",
-    }
-    day_df = merged_df[merged_df[day_map[sel_day]] == "Y"]
-
-    subject_opts = sorted(day_df["Subject"].dropna().unique().tolist())
-    sel_subj = st.selectbox("Select Subject", ["All"] + subject_opts)
+    sel_subj = st.selectbox("Select Subject", ["All"] + subject_opts, key="aa_subj_select")
 
     if sel_subj != "All":
         day_df = day_df[day_df["Subject"] == sel_subj]
